@@ -1,145 +1,54 @@
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: cluster-autoscaler
-  namespace: ??
-  annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::<>:role/eks-cluster-autoscaler
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: cluster-autoscaler
-rules:
-  - apiGroups: [""]
-    resources: ["events", "endpoints"]
-    verbs: ["create", "patch"]
-  - apiGroups: [""]
-    resources: ["pods/eviction"]
-    verbs: ["create"]
-  - apiGroups: [""]
-    resources: ["pods/status"]
-    verbs: ["update"]
-  - apiGroups: [""]
-    resources: ["endpoints"]
-    resourceNames: ["cluster-autoscaler"]
-    verbs: ["get", "update"]
-  - apiGroups: [""]
-    resources: ["nodes"]
-    verbs: ["watch", "list", "get", "update"]
-  - apiGroups: [""]
-    resources: ["namespaces", "pods", "services", "replicationcontrollers", "persistentvolumeclaims", "persistentvolumes"]
-    verbs: ["watch", "list", "get"]
-  - apiGroups: ["extensions"]
-    resources: ["replicasets", "daemonsets"]
-    verbs: ["watch", "list", "get"]
-  - apiGroups: ["policy"]
-    resources: ["poddisruptionbudgets"]
-    verbs: ["watch", "list"]
-  - apiGroups: ["apps"]
-    resources: ["statefulsets", "replicasets", "daemonsets"]
-    verbs: ["watch", "list", "get"]
-  - apiGroups: ["storage.k8s.io"]
-    resources: ["storageclasses", "csinodes", "csidrivers", "csistoragecapacities"]
-    verbs: ["watch", "list", "get"]
-  - apiGroups: ["batch", "extensions"]
-    resources: ["jobs"]
-    verbs: ["get", "list", "watch", "patch"]
-  - apiGroups: ["coordination.k8s.io"]
-    resources: ["leases"]
-    verbs: ["create"]
-  - apiGroups: ["coordination.k8s.io"]
-    resourceNames: ["cluster-autoscaler"]
-    resources: ["leases"]
-    verbs: ["get", "update"]
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: cluster-autoscaler
-  namespace: kube-system
-rules:
-  - apiGroups: [""]
-    resources: ["configmaps"]
-    verbs: ["create","list","watch"]
-  - apiGroups: [""]
-    resources: ["configmaps"]
-    resourceNames: ["cluster-autoscaler-status", "cluster-autoscaler-priority-expander"]
-    verbs: ["delete", "get", "update", "watch"]
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: cluster-autoscaler
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-autoscaler
-subjects:
-  - kind: ServiceAccount
-    name: cluster-autoscaler
-    namespace: ??
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: cluster-autoscaler
-  namespace: ??
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: cluster-autoscaler
-subjects:
-  - kind: ServiceAccount
-    name: cluster-autoscaler
-    namespace: kube-system
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: cluster-autoscaler
-  namespace: kube-system
-  labels:
-    app: cluster-autoscaler
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: cluster-autoscaler
-  template:
-    metadata:
-      labels:
-        app: cluster-autoscaler
-    spec:
-      serviceAccountName: cluster-autoscaler
-      containers:
-        - image: registry.k8s.io/autoscaling/cluster-autoscaler:??
-          name: cluster-autoscaler
-          resources:
-            limits:
-              cpu: 100m
-              memory: 600Mi
-            requests:
-              cpu: 100m
-              memory: 600Mi
-          # https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/cloudprovider/aws/README.md
-          command:
-            - ./cluster-autoscaler
-            - --v=4
-            - --stderrthreshold=info
-            - --cloud-provider=aws
-            - --skip-nodes-with-local-storage=false
-            - --expander=least-waste
-            - --node-group-auto-discovery=asg:tag=k8s.io/cluster-autoscaler/enabled,k8s.io/cluster-autoscaler/?? # Update cluster
-            - --balance-similar-node-groups
-            - --skip-nodes-with-system-pods=false
-          volumeMounts:
-            - name: ssl-certs
-              mountPath: /etc/ssl/certs/ca-certificates.crt
-              readOnly: true
-          imagePullPolicy: "Always"
-      volumes:
-        - name: ssl-certs
-          hostPath:
-            path: "/etc/ssl/certs/ca-bundle.crt"
+data "aws_iam_policy_document" "eks_cluster_autoscaler_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
+
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.eks.url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:kube-system:cluster-autoscaler1"]
+    }
+
+    principals {
+      identifiers = [aws_iam_openid_connect_provider.eks.arn]
+      type        = "Federated"
+    }
+  }
+}
+
+resource "aws_iam_role" "eks_cluster_autoscaler" {
+  assume_role_policy = data.aws_iam_policy_document.eks_cluster_autoscaler_assume_role_policy.json
+  name               = "eks-cluster-autoscaler"
+}
+
+resource "aws_iam_policy" "eks_cluster_autoscaler" {
+  name = "eks-cluster-autoscaler"
+
+  policy = jsonencode({
+    Statement = [{
+      Action = [
+        "autoscaling:DescribeAutoScalingGroups",
+        "autoscaling:DescribeAutoScalingInstances",
+        "autoscaling:DescribeLaunchConfigurations",
+        "autoscaling:DescribeTags",
+        "autoscaling:SetDesiredCapacity",
+        "autoscaling:TerminateInstanceInAutoScalingGroup",
+        "ec2:DescribeLaunchTemplateVersions",
+        "ec2:DescribeInstanceTypes"
+      ]
+      Effect   = "Allow"
+      Resource = "*"
+    }]
+    Version = "2012-10-17"
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "eks_cluster_autoscaler_attach" {
+  role       = aws_iam_role.eks_cluster_autoscaler.name
+  policy_arn = aws_iam_policy.eks_cluster_autoscaler.arn
+}
+
+output "eks_cluster_autoscaler_arn" {
+  value = aws_iam_role.eks_cluster_autoscaler.arn
+}
+
