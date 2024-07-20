@@ -36,5 +36,5 @@
 
  - This command updates your kubeconfig with the current cluster your using.Remember to change the region to your current region and to change the demo to your cluster name.
 
-   aws eks update-kubeconifig --region us-east-1 --name demo
+   aws eks update-kubeconfig --region us-east-1 --name demo
 
