@@ -29,3 +29,7 @@
 
   6 New-Item config -type file
 
+# The following commands will be used
+- shows you which users is currently making api calls in your cli
+  
+aws sts get-caller-identity
