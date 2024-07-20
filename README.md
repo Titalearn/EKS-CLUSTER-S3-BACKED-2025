@@ -13,6 +13,9 @@
   so make sure choco is install in windows.
   
 - now run this commands below
+
+  You can go to the kubernetes official ducumentation to get the updated commands incase this commands below are outdated
+  https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/
   
   1 choco install kubernetes-cli
   
