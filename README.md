@@ -4,7 +4,7 @@
 
  This repository equally contains the script to add users in your EKS cluster
  
- While creating your eks cluster,remmeber the user creating this cluster will be the admin.So you can add a profile in the eks directory if you wish to use another aws profile to create this account.
+ While creating your eks cluster,remember the user creating this cluster will be the admin.So you can add a profile in the eks directory if you wish to use another aws profile to create this account.
 
 
 
