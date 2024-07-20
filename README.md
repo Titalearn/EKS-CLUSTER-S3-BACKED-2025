@@ -55,3 +55,6 @@
   export AWS_DEFAULT_REGION= type your region
 
   run this command to check if the caller is now your user  "aws sts get-caller-identity"
+
+  now update the cluster again  change the region and cluster name to your own "aws eks update-kubeconfig --region us-east-1 --name demo"
+  
