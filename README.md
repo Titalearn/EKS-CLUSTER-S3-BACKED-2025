@@ -48,6 +48,14 @@
 
 - If the previous command says Unauthorized then you need to login to the account that created this profile or any user that has access to this cluster. You can use environmental variables to export the secret key and access key of the profile as seen below
 
+  $env:AWS_ACCESS_KEY_ID="your_access_key_here"
+  
+$env:AWS_SECRET_ACCESS_KEY="your_secret_access_key_here"
+
+$env:AWS_DEFAULT_REGION="your_region_here"
+
+             or
+             
 set AWS_ACCESS_KEY_ID=your_access_key_here
 
 set AWS_SECRET_ACCESS_KEY=your_secret_access_key_here
