@@ -38,3 +38,7 @@
 
    aws eks update-kubeconfig --region us-east-1 --name demo
 
+- Next run the following command to see all your clusters added and your current context.If you dont have the command working on your teminal them install it using choco. Choco install kubectx
+
+  kubectx
+
