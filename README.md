@@ -1,4 +1,4 @@
-##This is an updated Eks-cluster script.
+## This is an updated Eks-cluster script.
 Make sure to change the regions,and follow this steps to provision your eks cluster.
 
 1- provision your vpc first 
