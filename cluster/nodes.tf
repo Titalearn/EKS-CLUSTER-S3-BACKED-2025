@@ -1,4 +1,5 @@
 # Data block to read local vpc terraform.tfstate file
+# make sure you change your path to your tf.state path. yours might me an s3 backend 
 data "terraform_remote_state" "network" {
   backend = "local"
   config = {
