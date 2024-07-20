@@ -12,7 +12,8 @@
 - To install kubectl on Windows you can use either Chocolatey package manager or any other package manager for windows.
   so make sure choco is install in windows.
   
-  - now run this commands below
+- now run this commands below
+  
   1 choco install kubernetes-cli
   
   2 kubectl version --client
