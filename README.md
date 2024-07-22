@@ -67,3 +67,5 @@ set AWS_DEFAULT_REGION=your_region_here
 
   now update the cluster again.Change the region and cluster name to your own "aws eks update-kubeconfig --region us-east-1 --name demo"
   
+# How to add users in your EKS cluster
+creating cluster roles and clusterrolebinding
