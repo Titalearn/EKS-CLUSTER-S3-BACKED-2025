@@ -87,7 +87,7 @@ kubectl create -f rbac.yaml
 
 kubectl describe clusterrole reader.
 
-- next you will need to generate a pgp_key ( https://www.bing.com/chat?q=add%20pgp%20key%20to%20keybase&qs=ds&form=ATCVAJ)
+- next you will need to generate a pgp_key  https://sl.bing.net/kMwZbOzuLWC
 
   click on the link above to follow the following steps
 
