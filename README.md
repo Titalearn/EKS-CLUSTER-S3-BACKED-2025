@@ -69,3 +69,29 @@ set AWS_DEFAULT_REGION=your_region_here
   
 # How to add users in your EKS cluster
 creating cluster roles and clusterrolebinding
+
+The script for users main.tf is creating two user,developer 1 and manager.
+
+A developer group and a managers group is been created.
+
+
+# Step by step to add users in your eks cluster
+
+provision the first script called role.yaml (this will create roles in your cluster.You can always add more roles.
+
+cd in to users and run the following commands
+
+kubectl create -f role.yaml
+
+kubectl create -f rbac.yaml
+
+kubectl describe clusterrole reader.
+
+- next you will need to generate a pgp_key ( https://www.bing.com/chat?q=add%20pgp%20key%20to%20keybase&qs=ds&form=ATCVAJ)
+
+  click on the link above to follow the following steps
+
+next go to pgp key and change what you fine in main.tf and replace with your own. e.g keybase:lavet to keybase:james
+
+make sure its same user name for your keybase profile.
+
