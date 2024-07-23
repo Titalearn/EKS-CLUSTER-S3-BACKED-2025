@@ -95,3 +95,36 @@ next go to pgp key and change what you fine in main.tf and replace with your own
 
 make sure its same user name for your keybase profile.
 
+- Next configure a user profile for all the users you created.
+
+  aws configure --profile developer
+
+- Now lets add the developer in our eks cluster. You must edit the aws-auth
+
+  kubectl edit -n kube-system cm aws-auth
+
+- Once you run the above command it will open an edit page for your aws-auth
+
+below the data line add this mapUsers: |
+    - userarn: arn:aws:iam::654654187689:user/developer
+      username: developer
+      groups:
+      - reader
+
+- next stage update kubeconfig. change the profile
+
+  aws eks update-kubeconfig --name demo --profile developer --region us-east-1
+
+- check if the new profile ( developer) is added to config
+
+  kubectl config view --minify
+
+- Use tthe following command to check the permisions of the user. change the pod to other resources like secrets ,create and other to see the permissions that user has.
+
+  kubectl auth can-i get pod
+
+- To go back to your default profile that created the cluster or admin run the following command.
+
+  aws eks update-kubeconfig --name demo --region us-east-1
+  
+
