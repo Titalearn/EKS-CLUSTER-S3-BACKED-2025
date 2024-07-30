@@ -162,7 +162,8 @@ below the data line add this mapUsers: |
            username : manager
            groups:
            - system:masters 
-
+      run this command next " aws eks --region us-east-1 update-kubeconfig --name demo
+ 
   -Now lets switch to the managers profile and see what we can do
 
        aws eks --region us-east-1 update-kubeconfig --name demo --profile manager
