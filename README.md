@@ -157,12 +157,11 @@ below the data line add this mapUsers: |
 -Next we need to edit the configmap aws-auth
  
     " kubectl edit -n kube-system cm aws-auth "  next you will see map roles add the rolearn,username,groups,system:masters
-
-   // mapRoles: |
+    mapRoles: |
          - rolearn : arn:aws:iam::654654187689:role/Manager-eks-Role
            username : manager
            groups:
-           - system:masters //
+           - system:masters 
 
   -Now lets switch to the managers profile and see what we can do
 
