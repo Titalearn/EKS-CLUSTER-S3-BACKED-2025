@@ -126,5 +126,57 @@ below the data line add this mapUsers: |
 - To go back to your default profile that created the cluster or admin run the following command.
 
   aws eks update-kubeconfig --name demo --region us-east-1
-  
+
+  # How to add a manager to the cluster
+
+  - make sure you have created roles for your manager
+
+    Go to aws and create access and secret access for your manager.
+
+  - Configure a profile for the manager with the following command
+
+    aws configure --profile manager
+
+  - Add the  access key and secret access key
+
+    example access key  -------    exmple secret access key -------    Add them with your region
+  - cd in to .aws and cat credentials to make sure the manager credentials exist.
+
+    next run the following command " cat config " you will notice  a manager profile has been created.
+    
+  - Next we need to add a role which the manager will use
+ 
+    vi config
+
+    scroll down to profile manager and add this
+
+    role_arn = copy the role on aws and type here. \
+
+    add also below "source_profile = manager"  change to your own profile
+
+  - Next we need to edit the configmap aws-auth
+ 
+    " kubectl edit -n kube-system cm aws-auth "  next you will see map roles add the rolearn,username,groups,system:masters
+
+   // mapRoles: |
+         - rolearn : arn:aws:iam::654654187689:role/Manager-eks-Role
+           username : manager
+           groups:
+           - system:masters //
+
+  - Now lets switch to the managers profile and see what we can do
+
+       aws eks --region us-east-1 update-kubeconfig --name demo --profile manager
+
+  - Next run this command to see if your master can get anything withing the cluster
+ 
+       kubectl auth can-i "*" "*"
+
+  -Next run the following command to know the profile making the commands
+
+       kubectl config view --minify
+
+     
+
+      
 
