@@ -185,6 +185,9 @@ below the data line add this mapUsers: |
     aws configure --profile "username for user" e.g Mark aws configure --profile mark
 
 
-  
-      
+ -Run the following command and add the assume role to your admin users
+
+    Vim config
+
+ copy the group arn and paste under the users name  example role_arn = type the group arn here then add the source_profile = username
 
