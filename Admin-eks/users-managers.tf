@@ -54,3 +54,4 @@ resource "aws_iam_role_policy_attachment" "admin_policy" {
 resource "aws_iam_policy" "eks_admin" {
   name   = "eks-masters"
   policy = data.aws_iam_policy_document.masters.json
+}
