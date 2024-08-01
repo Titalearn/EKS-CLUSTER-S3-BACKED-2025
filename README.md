@@ -207,3 +207,7 @@ below the data line add this mapUsers: |
 -run the following command to see which profile you are using
 
      kubectl config view --minify
+
+-run the following command to see if your new admin can get everything
+
+   kubectl auth can-i "*" "*"
