@@ -198,4 +198,4 @@ below the data line add this mapUsers: |
 
 -Edit your kube-system and add the group to your aws-auth
 
-     kubectl edit -n kube-systems cm aws-auth
+     kubectl edit -n kube-system cm aws-auth
