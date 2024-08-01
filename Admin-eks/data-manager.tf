@@ -40,15 +40,11 @@ data "aws_iam_policy_document" "masters_role" {
   statement {
     sid    = "AllowMastersAssumeRole"
     effect = "Allow"
-    actions = [
-      "sts:AssumeRole",
-    ]
-    principals {
-      type        = "AWS"
-      identifiers  = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Masters-eks-Role"]
+    actions = ["sts:AssumeRole"]
+      resources = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Masters-eks-Role"]
       #identifiers = ["data.aws_caller_identity.current.account_id]
   }
 }
-}
+
 
 data "aws_caller_identity" "current" {}
