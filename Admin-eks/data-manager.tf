@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "masters_role" {
     ]
     principals {
       type        = "AWS"
-      identifiers = [data.aws_caller_identity.current.account_id]
+      identifiers  = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Masters-eks-Role"]
       #identifiers = ["data.aws_caller_identity.current.account_id]
   }
 }
