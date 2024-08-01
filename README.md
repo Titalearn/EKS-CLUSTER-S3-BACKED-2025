@@ -199,3 +199,11 @@ below the data line add this mapUsers: |
 -Edit your kube-system and add the group to your aws-auth
 
      kubectl edit -n kube-system cm aws-auth
+
+-switch to the new user profile and check if they are part of the cluster now
+
+     aws eks update-kubeconfig --region us-east-1 --name demo --profile jane
+
+-run the following command to see which profile you are using
+
+     kubectl config view --minify
