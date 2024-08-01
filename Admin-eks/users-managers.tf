@@ -22,7 +22,7 @@ resource "aws_iam_group" "eks_masters" {
 resource "aws_iam_group_policy" "masters_policy" {
   name   = "masters"
   group  = aws_iam_group.eks_masters.name
-  policy = data.aws_iam_policy_document.masters.json
+  policy = data.aws_iam_policy_document.masters_role.json
 }
 
 resource "aws_iam_group_membership" "masters_team" {
