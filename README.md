@@ -191,3 +191,10 @@ below the data line add this mapUsers: |
 
  copy the group arn and paste under the users name  example role_arn = type the group arn here then add the source_profile = username
 
+-Update your cluster
+
+    aws eks update-kubeconfig --region us-east-1 --name demo
+
+-Edit your kube-system and add the group to your aws-auth
+
+   kubectl edit -n kube-systems cm aws-auth
