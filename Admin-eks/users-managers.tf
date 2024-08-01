@@ -27,7 +27,7 @@ resource "aws_iam_group_policy" "masters_policy" {
 
 resource "aws_iam_group_membership" "masters_team" {
   name  = "masters-group-membership"
-  users = [aws_iam_user.eks_user[1].name, aws_iam_user.eks_user[2].name, aws_iam_user.eks_user[3].name]
+  users = [aws_iam_user.eks_user[0].name, aws_iam_user.eks_user[1].name, aws_iam_user.eks_user[2].name]
   group = aws_iam_group.eks_masters.name
 }
 
