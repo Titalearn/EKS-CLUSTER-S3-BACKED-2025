@@ -181,9 +181,9 @@ below the data line add this mapUsers: |
 
 - After you have provisions the EKS-ADMIN script, run the following commands.
 
--first create an access for your user in aws and run the command below
+-First create an access for your user in aws and run the command below
 
-aws configure --profile "username for user" e.g Mark aws configure --profile mark
+   aws configure --profile "username for user" e.g Mark aws configure --profile mark
 
 
   
