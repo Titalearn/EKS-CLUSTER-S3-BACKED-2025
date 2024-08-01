@@ -195,6 +195,7 @@ below the data line add this mapUsers: |
 
     aws eks update-kubeconfig --region us-east-1 --name demo
 
+
 -Edit your kube-system and add the group to your aws-auth
 
-   kubectl edit -n kube-systems cm aws-auth
+     kubectl edit -n kube-systems cm aws-auth
