@@ -177,6 +177,15 @@ below the data line add this mapUsers: |
        kubectl config view --minify
 
      
+# HOW TO CREATE A ADMIN GROUP AND ADD USERS TO YOUR EKS CLUSTER
 
+- After you have provisions the EKS-ADMIN script, run the following commands.
+
+-first create an access for your user in aws and run the command below
+
+aws configure --profile "username for user" e.g Mark aws configure --profile mark
+
+
+  
       
 
