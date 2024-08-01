@@ -43,12 +43,10 @@ data "aws_iam_policy_document" "masters_role" {
     actions = [
       "sts:AssumeRole",
     ]
-    principals {
-      type        = "AWS"
-      identifiers = [data.aws_caller_identity.current.account_id]
+    resources = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/masters-eks-role"]
       #identifiers = ["data.aws_caller_identity.current.account_id]
     }
   }
-}
+
 
 data "aws_caller_identity" "current" {}
