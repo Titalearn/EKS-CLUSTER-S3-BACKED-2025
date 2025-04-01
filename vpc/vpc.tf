@@ -1,4 +1,19 @@
 #0. Using external data to generate vpc time stamp
+
+terraform {
+  backend "s3" {
+    bucket = "alexaedge-bucket"            #Change to your bucket name
+    key    = "vpc/terraform.tfstate"
+    region = "us-east-1" # Correct region
+
+  # For State Locking
+    dynamodb_table = "terraform-lock-table"  # Correct table name  
+    encrypt        = true # Encrypt the state file
+  }
+}
+
+
+
 #1. Create VPC
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
